@@ -3,11 +3,13 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0;
   padding: 10px;
 }
 div{
   max-width: 800px;
   width: 100%;
+  box-sizing: border-box;
 }
 p{
   line-height: 1.6;
