@@ -2,7 +2,15 @@ body{
   background-color: #F5F5DC;
   display: flex;
   flex-direction: column;
-  padding-left: 200px;
+  align-items: center;
+  padding: 10px;
+}
+div{
+  max-width: 800px;
+  width: 100%;
+}
+p{
+  line-height: 1.6;
 }
 .komeiji{
   font-weight: bold;
