@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C++_Cheat_Sheet</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div>
+      <h2 class = "scarlet">
+        制約別使用可能アルゴリズム
+      </h2>
+      <p>
+        <span class = "komeiji">N &lt;= 10～20</span><br />
+        　・O(N!)→順列全探索(N&lt;= 10まで)<br />
+        　・O(2^N)→bit全探索(間に合わなければ再帰関数で枝狩りなど)<br />
+        　・O(N^4)など→多重for文による全探索
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 100</span><br />
+        　・O(N^3)→3重for文全探索
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 1000</span><br />
+        　・O(N^2)→二重for文全探索<br />
+        　・O(N^2 logN)→for文内でsort、二分探索(クエリ問題など)
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 2*10^5</span><br />
+        　・O(NlogN)→sortからの二分探索
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 10^7</span><br />
+        　・O(N)→線形探索(累積和、尺取りなど)
+      </p>
+      <p>
+        <span class = "komeiji">それ以上(N &gt;= 10^7)</span><br />
+        　・O(logN)→二分探索(sort済み)<br />
+        　・O(1)→数学
+      </p>
+    </div>
+    <div>
+      <h2 class = "scarlet">
+        STLまとめ
+      </h2>
+      <p>
+        <span class = "komeiji">min,max</span><br />
+        　・min(a,b),max(a,b) <span class = "yakumo">//O(1)</span><br />
+        　・min({a,b,...,y,z}),max({a,b,...,y,z})<br />
+        　・*min_element(v.begin(),v.end()),*max_element(v.begin(),v.end()) <span class = "yakumo">//O(N)</span>
+      </p>
+      <p>
+        <span class = "komeiji">vector</span><br />
+        　・push_back(x),pop_back()　<span class = "yakumo">//O(1)</span><br />
+        　・sort(v.begin(),v.end())←昇順 <span class = "yakumo">//O(NlogN)</span><br />
+        　・sort(v.rbegin(),v.rend())←降順<br />
+        　・sort(v.begin(),v.end(),[](int a, int b) {return a &lt; b})←ラムダ式による比較関数の変更(例はデフォルト)<br />
+        　・reverse(v.begin(),v.end())<br />
+        　・v.erase(unique(v.begin(), v.end()), v.end())←重複削除 <span class = "yakumo">//O(N)</span><br />
+        　(<span class = "yakumo">全体の重複を消す場合→sort必須</span>、隣り合った重複を消したい場合→sort必要なし)<br />
+        　・it = v.erase(it)←次の要素を指すイテレーターが返る <span class = "yakumo">//後ろに詰める→O(N)</span>
+      </p>
+      <p>
+        <span class = "komeiji">string</span><br />
+        　・string S<br />
+        　・S.substr(l,n)←Sのl文字目からn文字の部分文字列<br />
+        　・stoi(S),stoll(S)←文字列を数字に変換<br />
+        　・to_string(n)←数字を文字列に変換
+      </p>
+      <p>
+        <span class = "komeiji">stack</span> <span class = "yakumo">//全てO(1)</span><br />
+        　・stack&lt;int&gt; st<br />
+        　・st.push(x), st.pop()<br />
+        　・st.top()←一番上の要素を参照<br />
+        　・st.empty()←空ならtrueを返す
+      </p>
+      <p>
+        <span class = "komeiji">queue</span> <span class = "yakumo">//全てO(1)</span><br />
+        　使用例：BFS<br />
+        　・queue&lt;int&gt; que<br />
+        　・que.push(x), que.pop()<br />
+        　・que.front()←一番前の要素を参照<br />
+        　・que.empty()←空ならtrueを返す
+      </p>
+      <p>
+        <span class = "komeiji">priority_queue</span><br />
+        　使用例：ダイクストラ法、貪欲<br />
+        　・priority_queue<int> pq←大きい順<br />
+        　・priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq←小さい順<br />
+        　・pq.push(x), pq.pop() <span class = "yakumo">//O(logN)</span><br />
+        　・pq.top()←一番前の要素を参照 <span class = "yakumo">//O(1)</span><br />
+        　・pq.empty()←空ならtrueを返す
+      </p>
+      <p>
+        <span class = "komeiji">deque</span> <span class = "yakumo">//全てO(1)</span><br />
+        　使用例：0-1BFS<br />
+        　・deque<int> dq<br />
+        　・dq.front(), dq.back()<br />
+        　・dq.push_front(x)<br />
+        　・dq.push_back(x)<br />
+        　・dq.pop_front()<br />
+        　・dq.pop_back();
+      </p>
+      <p>
+        <span class = "komeiji">map</span> <span class = "yakumo">//全てO(logN)</span><br />
+        　・map&lt;番地,アクセス先&gt;<br />
+        　以下使用例↓
+        　・map&lt;string,int&gt; mp<br />
+        　・mp["sakuya"] = 398←要素へのアクセス、キーが存在しなければ自動追加<br />
+        　・mp.count("keine")←存在すれば1、存在しなければ0を返す
+      </p>
+      <p>
+        <span class = "komeiji">set</span> <span class = "yakumo">//全てO(logN)</span><br />
+        　・set&lt;int&gt; s<br />
+        　・s.insert(x)<br />
+        　・s.erase(x)<br />
+        　・auto it = s.lower_bound(x)←最初のx以上のイテレーター<br />
+        　・if (it != s.end()) cout &lt;&lt; *it←x以上の最小のものを出力
+      </p>
+      <p>
+        <span class = "komeiji">pair</span><br />
+        　・pair&lt;int,int&gt; p = {a,b}<br />
+        　・p.first,p.second←それぞれにアクセス
+      </p>
+      <p>
+        <span class = "komeiji">tuple</span><br />
+        　・tuple&lt;int,int,...,int&gt; t←定義の例<br />
+        　・get&lt;i&gt;(t)←i番目の要素にアクセス(0-index)<br />
+        　・make_tuple(a,b,c,...,z)
+      </p>
+      <p>
+        <span class = "komeiji">binary_search</span> <span class = "yakumo">//O(logN)</span><br />
+        　＊昇順sortされている必要あり＊<br />
+        　・binary_search(v.begin(),v.end(),x)←存在確認
+      </p>
+      <p>
+        <span class = "komeiji">lower_bound(以上),upper_bound(より大きい)</span> <span class = "yakumo">//O(logN)</span><br />
+        　＊昇順sortされている必要あり＊<br />
+        　使用例：二分探索<br />
+        　・int target = n←int型の場合の例、あらかじめ変数に入れておくと分かりやすい<br />
+        　・auto it = lower_bound(v.begin(),v.end(),n)←イテレーター取得<br />
+        　・if (it != v.end()) int index = it - v.begin()←インデックス取得
+      </p>
+      <p>
+        <span class = "komeiji">count</span><br />
+        　・count(v.begin(),v.end(),x) <span class = "yakumo">//O(N)</span>
+      </p>
+      <p>
+        <span class = "komeiji">find</span> <span class = "yakumo">//O(N)</span><br />
+        　・auto it = find(v.begin(),v.end(),x)←最初にxが見つかった時のイテレーターを返す<br />
+        　・if (it != v.end()) int index = it - v.begin()←xが見つかったならインデックスを取得<br />
+        　map,setの場合↓<br />
+        　・auto it = mp.find(x)<br />
+        　・if (it != mp.end())←存在する
+      </p>
+      <p>
+        <span class = "komeiji">next_permutation</span> <span class = "yakumo">//O(N)</span><br />
+        　使用例：順列全探索<br />
+        　・昇順sortされている必要あり<br />
+        　・next_permutation(v.begin(),v.end())←do-while文で使うことがほとんど
+      </p>
+      <p>
+        <span class = "komeiji">__builtin_popcount</span><br />
+        　・__builtin_popcount(x)←xのうち1のビット数を返す<br />
+        　・__builtin_popcountll(x)←long longに対応
+      </p>
+    </div>
+    <script src="script.js" defer></script>
+  </body>
+</html>
