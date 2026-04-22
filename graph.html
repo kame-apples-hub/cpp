@@ -30,19 +30,15 @@ const int dy[8] = {0, 1, 0, -1, 1, -1, 1, -1};
       <pre><code class="language-cpp">
 struct UnionFind {
   vector&lt;int&gt; par, sz;
-
   UnionFind(int n) : par(n), sz(n,1) {
     for (int i = 0; i &lt; n; i++) par[i] = i;
   }
-
   int root(int x) {
     return par[x] == x ? x : par[x] = root(par[x]);
   }
-
   bool same(int a, int b) {
     return root(a) == root(b);
   }
-
   void unite(int a, int b) {
     a = root(a); b = root(b);
     if (a == b) return;
@@ -50,7 +46,6 @@ struct UnionFind {
     par[b] = a;
     sz[a] += sz[b];
   }
-
   int size(int x) {
     return sz[root(x)];
   }
@@ -60,27 +55,22 @@ struct UnionFind {
       <pre><code class="language-cpp">
 struct UnionFind {
   vector&lt;int&gt; par, sz, weight;
-
   UnionFind(int n) : par(n), sz(n,1), weight(n,0) {
     for (int i = 0; i &lt; n; i++) par[i] = i;
   }
-
   int root(int x) {
     if (par[x] == x) return x;
     int r = root(par[x]);
     weight[x] += weight[par[x]];
     return par[x] = r;
   }
-
   int weight_to_root(int x) {
     root(x);
     return weight[x];
   }
-
   bool same(int a, int b) {
     return root(a) == root(b);
   }
-
   bool unite(int a, int b, int w) {
     w += weight_to_root(a); w -= weight_to_root(b);
     a = root(a); b = root(b);
@@ -91,11 +81,9 @@ struct UnionFind {
     sz[a] += sz[b];
     return true;
   }
-
   int size(int x) {
     return sz[root(x)];
   }
-
   int diff(int a, int b) {
     return weight_to_root(b) - weight_to_root(a);
   }
