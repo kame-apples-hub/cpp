@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C++_Cheat_Sheet</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  </head>
+  <body>
+    <div id="header"></div>
+    <div>
+      <h2>
+        AtCoder C++関連まとめ
+      </h2>
+      <p>
+        最初に置いといたほうがいいやつ<br />
+        ・g++ main.cpp -O2 -o a && oj tはVSCodeでローカル実行するときのやつ<br />
+        ・#define _GLIBCXX_DEBUGは配列の範囲外アクセスを自動で検知してくれるけど実行速度が遅くなるので提出時は外すのがおすすめ
+      </p>
+      <pre><code class="language-cpp">
+g++ main.cpp -O2 -o a && oj t //VSCode使ってない人はいらない
+
+//ここから下
+#define _GLIBCXX_DEBUG
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+using ll = long long;
+using pii = pair&lt;int,int&gt;;
+using Graph = vector&lt;vector&lt;int&gt;&gt;;
+struct Edge {int to; ll cost;};
+using WGraph = vector&lt;vector&lt;Edge&gt;&gt;;
+const ll INF = 1LL&lt;&lt;60;
+//ここまで
+
+//出力の桁数を小数点以下第何位と設定できるやつ。たまにA問題でも出されるから知っておくべき。
+//nのとこに桁数を入れる。出力の前にこれを置いて使う
+cout &lt;&lt; fixed &lt;&lt; setprecision(n);
+      </code></pre>
+    </div>
+    <div id="footer"></div>
+    <script src="script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

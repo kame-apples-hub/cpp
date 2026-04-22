@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>グラフ関連</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div>
+    <h2 class = "scarlet">グラフ関連ライブラリ</h2>
+    <p class = "yakumo">ホームのやつを最初に置いていること前提です</p>
+  </div>
+  <div class = "library">
+    <div>
+      <p>・グリッド上の問題の時</p>
+      <pre><code class="language-cpp">
+//4方向
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+const char dc[4] = {'R','U','L','D'};
+
+//8方向
+const int dx[8] = {1, 0, -1, 0, 1, 1, -1, -1};
+const int dy[8] = {0, 1, 0, -1, 1, -1, 1, -1};
+      </code></pre>
+      <p>・Union-Findテンプレ(コピペ)</p>
+      <pre><code class="language-cpp">
+struct UnionFind {
+  vector&lt;int&gt; par, sz;
+
+  UnionFind(int n) : par(n), sz(n,1) {
+    for (int i = 0; i &lt; n; i++) par[i] = i;
+  }
+
+  int root(int x) {
+    return par[x] == x ? x : par[x] = root(par[x]);
+  }
+
+  bool same(int a, int b) {
+    return root(a) == root(b);
+  }
+
+  void unite(int a, int b) {
+    a = root(a); b = root(b);
+    if (a == b) return;
+    if (sz[a] &lt; sz[b]) swap(a,b);
+    par[b] = a;
+    sz[a] += sz[b];
+  }
+
+  int size(int x) {
+    return sz[root(x)];
+  }
+};
+      </code></pre>
+      <p>・重み付きUnion-Find(コピペ)</p>
+      <pre><code class="language-cpp">
+struct UnionFind {
+  vector&lt;int&gt; par, sz, weight;
+
+  UnionFind(int n) : par(n), sz(n,1), weight(n,0) {
+    for (int i = 0; i &lt; n; i++) par[i] = i;
+  }
+
+  int root(int x) {
+    if (par[x] == x) return x;
+    int r = root(par[x]);
+    weight[x] += weight[par[x]];
+    return par[x] = r;
+  }
+
+  int weight_to_root(int x) {
+    root(x);
+    return weight[x];
+  }
+
+  bool same(int a, int b) {
+    return root(a) == root(b);
+  }
+
+  bool unite(int a, int b, int w) {
+    w += weight_to_root(a); w -= weight_to_root(b);
+    a = root(a); b = root(b);
+    if (a == b) return false;
+    if (sz[a] &lt; sz[b]) swap(a,b), w = -w;
+    par[b] = a;
+    weight[b] = w;
+    sz[a] += sz[b];
+    return true;
+  }
+
+  int size(int x) {
+    return sz[root(x)];
+  }
+
+  int diff(int a, int b) {
+    return weight_to_root(b) - weight_to_root(a);
+  }
+};
+      </code></pre>
+    </div>
+    <div>
+      <p>・DFS(全頂点を巡るだけ)</p>
+      <pre><code class="language-cpp">
+Graph G;
+vector&lt;int&gt; visited;
+
+void dfs(int v) {
+  visited[v] = 1;
+  for (int nv : G[v]) {
+      if (!visited[nv]) dfs(nv);
+  }
+}
+
+int main() {
+  int N,M; cin >> N >> M;
+  G.resize(N); visited.assign(N,0);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b; cin >> a >> b;
+    a--; b--;
+    G[a].push_back(b);
+    G[b].push_back(a); //有効グラフならいらない
+  }
+  dfs(0); //0スタート設定、入力によって変更
+}
+      </code></pre>
+      <p>・BFS(各頂点への最短距離)</p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  Graph G(N); vector&lt;int&gt; dist(N,-1);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b; cin >> a >> b;
+    a--; b--;
+    G[a].push_back(b);
+    G[b].push_back(a); //有効グラフならいらない
+  }
+  queue&lt;int&gt; que;
+  que.push(0); dist[0] = 0; //0スタート設定、入力によって変更
+  while (!que.empty()) {
+    int v = que.front(); que.pop();
+    for (int nv : G[v]) {
+      if (dist[nv] != -1) continue;
+      dist[nv] = dist[v]+1;
+      que.push(nv);
+    }
+  }
+}
+      </code></pre>
+      <p>・dijkstra(重み付きの最短距離)</p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  WGraph G(N); vector&lt;ll&gt; dist(N,INF);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b,c; cin >> a >> b >> c;
+    a--; b--;
+    G[a].push_back({b,c});
+    G[b].push_back({a,c}); //有効グラフならいらない
+  }
+  priority_queue&lt;pair&lt;ll,int&gt;,vector&lt;pair&lt;ll,int&gt;&gt;,greater&lt;pair&lt;ll,int&gt;&gt;&gt; pq;
+  pq.push({0,0}); dist[0]  = 0; //0スタート設定、入力によって変更
+  while (!pq.empty()) {
+    auto [d,v] = pq.top(); pq.pop();
+    if (d > dist[v] || dist[v] == INF) continue;
+    for (auto [nv,cost] : G[v]) {
+      if (dist[nv] > dist[v] + cost) {
+        dist[nv] = dist[v] + cost;
+        pq.push({dist[nv],nv});
+      }
+    }
+  }
+}
+      </code></pre>
+      <p>
+        とりあえずてきとーに特によく使うものを並べました。<br />
+        右の列の3つは問題に合わせて調整しないとダメなので注意
+      </p>
+    </div>
+  </div>
+  <div id="footer"></div>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>

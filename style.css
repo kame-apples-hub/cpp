@@ -1,0 +1,69 @@
+header {
+  width: 100%;
+  background: #222222;
+  padding: 12px;
+}
+nav {
+  display: flex;
+  gap: 25px;
+}
+nav a {
+  position: relative;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 4px 0;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: #ffcc00;
+  transition: 0.3s;
+}
+nav a:hover::after {
+  width: 100%;
+}
+body{
+  background-color: #F5F5DC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+}
+div{
+  max-width: 1000px;
+  width: 100%;
+  box-sizing: border-box;
+}
+p{
+  line-height: 1.6;
+}
+.library{
+  display: flex;
+  gap: 10px;
+}
+.komeiji{
+  font-weight: bold;
+}
+.yakumo{
+  color: #FF0000;
+}
+.scarlet{
+  text-decoration: underline;
+}
+pre {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 14px;
+}
+code {
+  font-family: Consolas, "Courier New", monospace;
+}

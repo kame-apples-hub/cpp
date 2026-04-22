@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>アルゴリズムまとめ</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div>
+      <h2 class = "scarlet">
+        制約別使用可能アルゴリズム(あくまで目安)
+      </h2>
+      <p>
+        <span class = "komeiji">N &lt;= 10～20</span><br />
+        　・O(N!)→順列全探索(N&lt;= 10まで)<br />
+        　・O(2^N)→bit全探索(間に合わなければ再帰関数で枝狩りなど、半分全列挙もあり)<br />
+        　・O(N^4)など→多重for文による全探索
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 100</span><br />
+        　・O(N^3)→3重for文全探索
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 1000</span><br />
+        　・O(N^2)→二重for文全探索<br />
+        　・O(N^2 logN)→for文内でsort、二分探索(クエリ問題など)
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 2*10^5(最も多いパターン)</span><br />
+        　・O(NlogN)→sortからの二分探索<br />
+        　・O(N)→メモを作っておくなどして計算量を削減することも多い
+      </p>
+      <p>
+        <span class = "komeiji">N &lt;= 10^7</span><br />
+        　・O(N)→線形探索(累積和、尺取りなど)
+      </p>
+      <p>
+        <span class = "komeiji">それ以上(N &gt;= 10^7)</span><br />
+        　・O(logN)→二分探索(sort済み)<br />
+        　・O(1)→数学
+      </p>
+    </div>
+    <div id="footer"></div>
+    <script src="script.js" defer></script>
+  </body>
+</html>
