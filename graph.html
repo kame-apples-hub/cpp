@@ -26,7 +26,7 @@ const char dc[4] = {'R','U','L','D'};
 const int ox[8] = {1, 0, -1, 0, 1, 1, -1, -1};
 const int oy[8] = {0, 1, 0, -1, 1, -1, 1, -1};
 
-//使用例
+//使用例(x: 列(W), y: 行(H))
 for (int d = 0; d &lt; 4; d++) {
   int nx = x+dx[d], ny = y+dy[d];
   if (0&lt;=nx && nx&lt;W && 0&lt;=ny && ny&lt;H) {
@@ -63,7 +63,7 @@ struct UnionFind {
       <pre><code class="language-cpp">
 struct WUnionFind {
   vector&lt;int&gt; par, sz, weight;
-  UnionFind(int n) : par(n), sz(n,1), weight(n,0) {
+  WUnionFind(int n) : par(n), sz(n,1), weight(n,0) {
     for (int i = 0; i &lt; n; i++) par[i] = i;
   }
   int root(int x) {
@@ -98,7 +98,7 @@ struct WUnionFind {
 };
       </code></pre>
       <p>
-        ・Kruskal(最小全域木を求める)<span class = "yakumo">*UnionFind前提*</span><br />
+        ・kruskal(最小全域木を求める)<span class = "yakumo">*UnionFind前提*</span><br />
         問題文で連結が保証されている場合も多い
       </p>
       <pre><code class="language-cpp">
@@ -109,15 +109,12 @@ int main() {
   for (int i = 0; i < M; i++) {
     int a,b; ll w; cin >> a >> b >> w;
     a--; b--;
-    edges[i] = {w,a,b};
+    edges[i] = {a,b,w};
   }
-  sort(edges.begin(),edges.end(),[](auto a,auto b){
-    if (a.cost < b.cost) return a < b;
-    return a > b;
-    });
+  sort(edges.begin(),edges.end(),[](auto &a,auto &b){return a.cost < b.cost});
   int used = 0;
   ll ans = 0;
-  for (const auto &[w,a,b] : edges) {
+  for (const auto &[a,b,w] : edges) {
     if (used == N-1) break;
     if (uf.same(a,b)) continue;
     uf.unite(a,b); ans += w; used++;
@@ -205,24 +202,27 @@ int main() {
   int N,M; cin >> N >> M;
   vector&lt;edge&gt; edges(M); vector<ll> dist(N,INF);
   for (int i = 0; i < M; i++) {
-    int a,b; ll c;
+    int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     edges[i] = {a,b,c};
   }
   dist[0] = 0; //0スタート設定、入力によって変更
   for (int i = 0; i < N-1; i++) {
+    bool updated = false;
     for (const auto &[from,to,cost] : edges) {
       if (dist[from] == INF) continue;
       if (dist[to] > dist[from] + cost) {
         dist[to] = dist[from] + cost;
+        updated = true;
       }
     }
+    if (!updated) break;
   }
   bool ok = true;
   for (const auto &[from,to,cost] : edges) {
     if (dist[from] == INF) continue;
     if (dist[to] > dist[from] + cost) {
-      ok = false; //falseになったなら負閉路あり
+      ok = false; //falseになる→N回目の更新→負閉路あり
     }
   }
 }
