@@ -89,6 +89,33 @@ struct WUnionFind {
   }
 };
       </code></pre>
+      <p>
+        ・Kruskal(最小全域木を求める)<br />
+        <span class = "yakumo">*UnionFind前提*</span><br />
+        問題文で連結が保証されている場合も多い
+      </p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  UnionFind uf(N);
+  vector<tuple<ll,int,int>> edges(M);
+  for (int i = 0; i < M; i++) {
+    int a,b; ll w; cin >> a >> b >> w;
+    a--; b--;
+    edges[i] = {w,a,b};
+  }
+  sort(edges.begin(),edges.end());
+  int used = 0;
+  ll ans = 0;
+  for (auto [w,a,b] : edges) {
+    if (used == N-1) break;
+    if (uf.same(a,b)) continue;
+    uf.unite(a,b); ans += w; used++;
+  }
+  if (used != N-1) cout << -1 << endl;
+  else cout << ans << endl;
+}
+      </code></pre>
     </div>
     <div>
       <p>・DFS(全頂点を巡るだけ)</p>
