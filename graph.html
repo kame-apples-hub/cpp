@@ -34,7 +34,7 @@ for (int d = 0; d &lt; 4; d++) {
   }
 }
       </code></pre>
-      <p>・Union-Findテンプレ(コピペ)</p>
+      <p>・Union-Findテンプレ <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
 struct UnionFind {
   vector&lt;int&gt; par, sz;
@@ -59,7 +59,7 @@ struct UnionFind {
   }
 };
       </code></pre>
-      <p>・重み付きUnion-Find(コピペ)</p>
+      <p>・重み付きUnion-Find <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
 struct WUnionFind {
   vector&lt;int&gt; par, sz, weight;
@@ -98,7 +98,7 @@ struct WUnionFind {
 };
       </code></pre>
       <p>
-        ・kruskal(最小全域木を求める)<span class = "yakumo">*UnionFind前提*</span><br />
+        ・kruskal(最小全域木を求める) <span class = "yakumo">//O(MlogM) ≒ O(MlogN)<br />*UnionFind前提*</span><br />
         問題文で連結が保証されている場合も多い
       </p>
       <pre><code class="language-cpp">
@@ -123,9 +123,13 @@ int main() {
   //used != N-1なら非連結
 }
       </code></pre>
+      <p>
+        グラフ関連で使えそうなアルゴリズムを全てまとめました。<br />
+        問題によってうまく調節すればE問題くらいまで解けるはず
+      </p>
     </div>
     <div>
-      <p>・DFS(全頂点を巡るだけ)</p>
+      <p>・DFS(全頂点を巡るだけ) <span class = "yakumo">//O(N+M)</span></p>
       <pre><code class="language-cpp">
 Graph G;
 vector&lt;int&gt; visited;
@@ -149,7 +153,7 @@ int main() {
   dfs(0); //0スタート設定、入力によって変更
 }
       </code></pre>
-      <p>・BFS(各頂点への最短距離)</p>
+      <p>・BFS(各頂点への最短距離) <span class = "yakumo">//O(N+M)</span></p>
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
@@ -172,7 +176,7 @@ int main() {
   }
 }
       </code></pre>
-      <p>・dijkstra(重み付き最短距離)</p>
+      <p>・dijkstra(重み付き最短距離) <span class = "yakumo">//O(MlogN)</span></p>
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
@@ -197,7 +201,7 @@ int main() {
   }
 }
       </code></pre>
-      <p>・bellman-ford(負の辺ありの重み付き最短距離)</p>
+      <p>・bellman-ford(負の辺ありの重み付き最短距離) <span class = "yakumo">//O(NM)</span></p>
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
@@ -228,10 +232,31 @@ int main() {
   }
 }
       </code></pre>
-      <p>
-        とりあえずてきとーに特によく使うものを並べました。<br />
-        問題に合わせて調整しないとダメなので注意
-      </p>
+      <p>・warshall-floyd(全頂点対最短経路) <span class = "yakumo">//O(N^3)</span></p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  vector<vector<ll>> dist(N,vector<ll>(N,INF));
+  for (int i = 0; i < N; i++) dist[i][i] = 0;
+  for (int i = 0; i < M; i++) {
+    int a,b; ll c; cin >> a >> b >> c;
+    a--; b--;
+    //多重辺対策てminを取る
+    dist[a][b] = min(dist[a][b],c);
+    dist[b][a] = min(dist[b][a],c); //有向グラフならいらない
+  }
+  for (int k = 0; k < N; k++) {
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        if (dist[i][k] == INF || dist[k][j] == INF) continue;
+        dist[i][j] = min(dist[i][j],dist[i][k]+dist[k][j]);
+      }
+    }
+  }
+  bool ok = true;
+  for (int i = 0; i < N; i++) if (dist[i][i] < 0) ok = false; //falseなら負閉路あり
+}
+      </code></pre>
     </div>
   </div>
   <div id="footer"></div>
