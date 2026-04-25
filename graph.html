@@ -148,7 +148,7 @@ int main() {
     int a,b; cin >> a >> b;
     a--; b--;
     G[a].push_back(b);
-    G[b].push_back(a); //有効グラフならいらない
+    G[b].push_back(a); //有向グラフならいらない
   }
   dfs(0); //0スタート設定、入力によって変更
 }
@@ -162,7 +162,7 @@ int main() {
     int a,b; cin >> a >> b;
     a--; b--;
     G[a].push_back(b);
-    G[b].push_back(a); //有効グラフならいらない
+    G[b].push_back(a); //有向グラフならいらない
   }
   queue&lt;int&gt; que;
   que.push(0); dist[0] = 0; //0スタート設定、入力によって変更
@@ -185,7 +185,7 @@ int main() {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     G[a].push_back({b,c});
-    G[b].push_back({a,c}); //有効グラフならいらない
+    G[b].push_back({a,c}); //有向グラフならいらない
   }
   priority_queue&lt;pair&lt;ll,int&gt;,vector&lt;pair&lt;ll,int&gt;&gt;,greater&lt;pair&lt;ll,int&gt;&gt;&gt; pq;
   pq.push({0,0}); dist[0]  = 0; //0スタート設定、入力によって変更
