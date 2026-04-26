@@ -9,9 +9,20 @@
   <body>
     <div id="header"></div>
     <div>
-      <p>
-        整数系の問題は後回しです。今度作ります。
-      </p>
+      <p>・素因数分解(数Aでやった奴をコードにしただけ)</p>
+      <pre><code class="language-cpp">
+map<ll,ll> prime_factorization(ll N) {
+  map<ll,ll> res;
+  for (ll i = 2; i*i <= N; i++) {
+    while (N % i == 0) {
+      res[i]++;
+      N /= i;
+    }
+  }
+  if (N != 1) res[N]++;
+  return res;
+}
+      </code></pre>
     </div>
     <div id="footer"></div>
     <script src="script.js" defer></script>
