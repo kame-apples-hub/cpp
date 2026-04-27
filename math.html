@@ -11,7 +11,18 @@
     <div id="header"></div>
     <div>
       <h2 class = "scarlet">数学問題計算テンプレ</h2>
-      <p>・素因数分解</p>
+      <p class = "yakumo">ホームのやつを最初に置いていること前提です</p>
+    </div>
+    <div class = "library">
+      <div>
+      <p>・素数判定 <span class = "yakumo">//O(√N)</span></p>
+      <pre><code class="language-cpp">
+bool isprime = true;
+for (int i = 2; i*i <= N; i++) {
+  if (N%i == 0) isprime = false;
+}
+      </code></pre>
+      <p>・素因数分解 <span class = "yakumo">//O(√N)</span></p>
       <pre><code class="language-cpp">
 map&lt;ll,ll&gt; prime_factorization(ll N) {
   map&lt;ll,ll&gt; res;
@@ -25,7 +36,26 @@ map&lt;ll,ll&gt; prime_factorization(ll N) {
   return res;
 }
       </code></pre>
-      <p>・繰り返し二乗法、逆元の計算</p>
+      <p>・エラトステネスの篩(N以下の素数を数える) <span class = "yakumo">//O(NloglogN)</span></p>
+      <pre><code class="language-cpp">
+vector&lt;bool&gt; isprime;
+vector&lt;int&gt; prime;
+void eratosthenes(ll N) {
+  isprime.assign(N+1,true); prime.clear();
+  isprime[0] = isprime[1] = false;
+  for (ll i = 2; i*i <= N; i++) {
+    if (isprime[i]) {
+      for (ll j = i*i; j <= N; j += i) isprime[j] = false;
+    }
+  }
+  for (ll i = 2; i <= N; i++) {
+    if (isprime[i]) prime.push_back(i);
+  }
+}
+      </code></pre>
+      </div>
+      <div>
+      <p>・繰り返し二乗法、逆元の計算 <span class = "yakumo">//O(log e)</p>
       <pre><code class="language-cpp">
 ll modpow(ll x,ll e) {
   ll r = 1;
@@ -41,9 +71,9 @@ ll inv(ll x) {
   return modpow(x,MOD-2);
 }
       </code></pre>
-      <p>・場合の数でよく使うやつまとめ(initで初期化)</p>
+      <p>・場合の数でよく使うやつまとめ(initで初期化) <span class = "yakumo">//O(N)</p>
       <pre><code class="language-cpp">
-vector<ll> fact,invfact;
+vector&lt;ll&gt; fact,invfact;
 void init(ll N) {
   fact.resize(N+1); invfact.resize(N+1);
   fact[0] = 1;
@@ -66,6 +96,7 @@ ll nHr(ll n,ll r) {
   return nCr(n+r-1,r);
 }
       </code></pre>
+      </div>
     </div>
     <div id="footer"></div>
     <script src="script.js" defer></script>
