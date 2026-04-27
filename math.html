@@ -10,7 +10,8 @@
   <body>
     <div id="header"></div>
     <div>
-      <p>・素因数分解(数Aでやった奴をコードにしただけ)</p>
+      <h2 class = "scarlet">数学問題計算テンプレ</h2>
+      <p>・素因数分解</p>
       <pre><code class="language-cpp">
 map&lt;ll,ll&gt; prime_factorization(ll N) {
   map&lt;ll,ll&gt; res;
@@ -22,6 +23,47 @@ map&lt;ll,ll&gt; prime_factorization(ll N) {
   }
   if (N != 1) res[N]++;
   return res;
+}
+      </code></pre>
+      <p>・繰り返し二乗法、逆元の計算</p>
+      <pre><code class="language-cpp">
+ll modpow(ll x,ll e) {
+  ll r = 1;
+  while (e) {
+    if (e & 1) r = r*x%MOD;
+    x = x*x%MOD;
+    e /= 2;
+  }
+  return r;
+}
+
+ll inv(ll x) {
+  return modpow(x,MOD-2);
+}
+      </code></pre>
+      <p>・場合の数でよく使うやつまとめ(initで初期化)</p>
+      <pre><code class="language-cpp">
+vector<ll> fact,invfact;
+void init(ll N) {
+  fact.resize(N+1); invfact.resize(N+1);
+  fact[0] = 1;
+  for (int i = 1; i <= N; i++) fact[i] = fact[i-1]*i%MOD;
+  invfact[N] = inv(fact[N]);
+  for (int i = N ; i > 0; i--) invfact[i-1] = invfact[i]*i%MOD;
+}
+
+ll nPr(ll n,ll r) {
+  if (r > n || r < 0) return 0;
+  return fact[n]*invfact[n-r]%MOD;
+}
+
+ll nCr(ll n,ll r) {
+  if (r > n || r < 0) return 0;
+  return fact[n]*invfact[r]%MOD*invfact[n-r]%MOD;
+}
+
+ll nHr(ll n,ll r) {
+  return nCr(n+r-1,r);
 }
       </code></pre>
     </div>
