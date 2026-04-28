@@ -85,7 +85,9 @@
         　・set&lt;int&gt; s<br />
         　・s.insert(x)<br />
         　・s.erase(x)<br />
-        　・auto it = s.lower_bound(x)←最初のx以上のイテレーター<br />
+        　・auto it = s.upper_bound(x)←最初のxより大きいイテレーター<br />
+        　・if (it != s.begin()) it--でイテレーターを移動(x以下を取得)<br />
+        　<span class = "yakumo">setだと動的に二分探索ができる！(1敗)</span><br />
         　・if (it != s.end()) cout &lt;&lt; *it←x以上の最小のものを出力
       </p>
       <p>
