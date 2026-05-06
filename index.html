@@ -26,16 +26,60 @@ g++ main.cpp -O2 -o a && oj t //VSCode使ってない人はいらない
 #include &lt;bits/stdc++.h&gt;
 using namespace std;
 using ll = long long;
-using pii = pair&lt;int,int&gt;;
-using Graph = vector&lt;vector&lt;int&gt;&gt;;
-struct edge {int to; ll cost;};
-using WGraph = vector&lt;vector&lt;edge&gt;&gt;;
-const ll INF = 1LL&lt;&lt;60;
+using ld = long double;
+using vi = vector&lt;int>;
+using vvi = vector&lt;vi>;
+using vvvi = vector&lt;vvi>;
+using vl = vector&lt;ll>;
+using vvl = vector&lt;vl>;
+using vvvl = vector&lt;vvl>;
+using vb = vector&lt;bool>;
+using pii = pair&lt;int,int>;
+using pll = pair&lt;ll,ll>;
+using vpi = vector&lt;pii>;
+using vpl = vector&lt;pll>;
+using Grid = vector&lt;string>;
+struct Edge {int to; ll cost;};
+struct uvEdge {int from,to; ll cost;};
+using Graph = vector&lt;vector&lt;int>>;
+using WGraph = vector&lt;vector&lt;Edge>>;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define repi(i, a, b) for (int i = (int)(a); i < (int)(b); i++)
+#define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
+#define lb(v, k) (lower_bound(all(v),(k))-(v).begin())
+#define ub(v, k) (upper_bound(all(v),(k))-(v).begin())
+#define pq(T) priority_queue&lt;T>
+#define pqg(T) priority_queue&lt;T,vector&lt;T>,greater&lt;T>>
+#define fi first
+#define se second
+#define pb push_back
+#define endl '\n'
+#define YesNo(i) cout << ((i) ? "Yes" : "No") << endl;
+
+const ll MOD = 998244353;
+const ll INF = 1LL<<60;
+const int inf = 1<<28;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+const char dc[4] = {'R','U','L','D'};
+
+template&lt;class T> inline bool chmax(T& a, T b) { if (a &lt; b) { a = b; return 1; } return 0; }
+template&lt;class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+template&lt;class T> void printv(const vector&lt;T>& v) {rep(i,v.size()) cout << v[i] << (i+1 == v.size() ? endl : ' ');}
+
+ll mymod(ll x, ll mod) {return (x%mod+mod)%mod;}
+ll modpow(ll x, ll n, ll mod) {
+  ll res = 1;
+  while (n) { if (n & 1) res = mymod(res*x,mod); x = mymod(x*x,mod); n >>= 1; }
+  return res;
+}
 
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
+  
 }
 //ここまで
 
