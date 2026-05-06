@@ -78,7 +78,12 @@
         　・map&lt;string,int&gt; mp<br />
         　・mp["sakuya"] = 398←要素へのアクセス、キーが存在しなければ自動追加<br />
         　・mp["youmu"]++←この場合キーが存在しなくても0から始まる(つまり1になる)<br />
-        　・mp.count("keine")←存在すれば1、存在しなければ0を返す
+        　・mp.count("keine")←存在すれば1、存在しなければ0を返す<br />
+        　auto it = mp.lower_bound(x); <span class = "yakumo">//比較可能なら数値以外もok</span><br />
+        　if (it != mp.end()) {<br />
+        　　key = it->first; //(*it).firstの短縮<br />
+        　　value = it->second; //(*it).secondの短縮<br />
+        　}
       </p>
       <p>
         <span class = "komeiji">set</span> <span class = "yakumo">//全てO(logN)</span><br />
