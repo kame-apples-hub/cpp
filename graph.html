@@ -191,7 +191,7 @@ int main() {
   pq.push({0,0}); dist[0]  = 0; //0スタート設定、入力によって変更
   while (!pq.empty()) {
     auto [d,v] = pq.top(); pq.pop();
-    if (d > dist[v] || dist[v] == INF) continue;
+    if (d > dist[v]) continue;
     for (auto [nv,cost] : G[v]) {
       if (dist[nv] > dist[v] + cost) {
         dist[nv] = dist[v] + cost;
