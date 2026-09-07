@@ -133,7 +133,7 @@ struct Lazy_SegTree {
     push(k);
     upd(k&lt;&lt;1,l,(l+r)/2,x,a,b);
     upd(k&lt;&lt;1|1,(l+r)/2,r,x,a,b);
-    seg[k] = max(seg[k<<1],seg[k<<1|1]);
+    seg[k] = max(seg[k&lt;&lt;1],seg[k&lt;&lt;1|1]);
   }
   void upd(int l, int r, int x) {
     upd(1,0,n,x,l,r);
