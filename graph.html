@@ -123,6 +123,36 @@ int main() {
   //used != N-1なら非連結
 }
       </code></pre>
+      <p>・強連結成分分解(SCC)</p>
+      <pre><code class="language-cpp">
+struct SCC {
+  int n;
+  Graph G, rG;
+  vi used, order, comp;
+  SCC(int n) : n(n), G(n), rG(n), used(n,0), comp(n,-1) {}
+  void add_edge(int u, int v) {
+    G[u].push_back(v);
+    rG[v].push_back(u);
+  }
+  void dfs(int v) {
+    used[v] = 1;
+    for (auto nv : G[v]) if (!used[nv]) dfs(nv);
+    order.push_back(v);
+  }
+  void rdfs(int v, int id) {
+    comp[v] = id;
+    for (auto nv : rG[v]) if (comp[nv] == -1) rdfs(nv,id);
+  }
+  //comp[v] = 頂点vが属するSCCの番号
+  int build() {
+    rep(v,n) if (!used[v]) dfs(v);
+    reverse(all(order));
+    int cnt = 0;
+    for (auto v : order) if (comp[v] == -1) rdfs(v,cnt++);
+    return cnt; //強連結成分の個数を返す
+  }
+};
+      </code></pre>
     </div>
     <div>
       <p>・DFS(全頂点を巡るだけ) <span class = "yakumo">//O(N+M)</span></p>
