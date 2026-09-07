@@ -15,7 +15,7 @@
   </div>
   <div class = "library">
     <div>
-      <p>・セグメント木</p>
+      <p>・セグメント木(RMQ) <span class = "yakumo">//O(logN)</span></p>
       <pre><code class="language-cpp">
 struct SegTree {
   int n;
@@ -38,7 +38,7 @@ struct SegTree {
   }
 };
     </code></pre>
-    <p>・BIT</p>
+    <p>・BIT <span class = "yakumo">//O(logN)</span></p>
     <pre><code class="language-cpp">
 struct BIT {
   int n;
@@ -62,7 +62,7 @@ struct BIT {
       </code></pre>
     </div>
     <div>
-      <p>・遅延評価セグメント木</p>
+      <p>・遅延評価セグメント木(RMQ) <span class = "yakumo">//O(logN)で区間への加算</span></p>
       <pre><code class="language-cpp">
 struct Lazy_SegTree {
   int n; vi seg,lazy;
