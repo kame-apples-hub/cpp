@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>グラフ関連</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div>
+    <h2 class = "scarlet">グラフ関連ライブラリ</h2>
+    <p class = "yakumo">ホームのやつを最初に置いていること前提です</p>
+  </div>
+  <div class = "library">
+    <div>
+      <p>・グリッド上の問題の時</p>
+      <pre><code class="language-cpp">
+//4方向
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, 1, 0, -1};
+const char dc[4] = {'R','U','L','D'};
+
+//8方向
+const int ox[8] = {1, 0, -1, 0, 1, 1, -1, -1};
+const int oy[8] = {0, 1, 0, -1, 1, -1, 1, -1};
+
+//使用例(x: 列(W), y: 行(H))
+for (int d = 0; d &lt; 4; d++) {
+  int nx = x+dx[d], ny = y+dy[d];
+  if (0&lt;=nx && nx&lt;W && 0&lt;=ny && ny&lt;H) {
+    //処理
+  }
+}
+      </code></pre>
+      <p>・Union-Findテンプレ <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
+      <pre><code class="language-cpp">
+struct UnionFind {
+  vector&lt;int&gt; par, sz;
+  UnionFind(int n) : par(n), sz(n,1) {
+    for (int i = 0; i &lt; n; i++) par[i] = i;
+  }
+  int root(int x) {
+    return par[x] == x ? x : par[x] = root(par[x]);
+  }
+  bool same(int a, int b) {
+    return root(a) == root(b);
+  }
+  void unite(int a, int b) {
+    a = root(a); b = root(b);
+    if (a == b) return;
+    if (sz[a] &lt; sz[b]) swap(a,b);
+    par[b] = a;
+    sz[a] += sz[b];
+  }
+  int size(int x) {
+    return sz[root(x)];
+  }
+};
+      </code></pre>
+      <p>・重み付きUnion-Find <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
+      <pre><code class="language-cpp">
+struct WUnionFind {
+  vector&lt;int&gt; par, sz, weight;
+  WUnionFind(int n) : par(n), sz(n,1), weight(n,0) {
+    for (int i = 0; i &lt; n; i++) par[i] = i;
+  }
+  int root(int x) {
+    if (par[x] == x) return x;
+    int r = root(par[x]);
+    weight[x] += weight[par[x]];
+    return par[x] = r;
+  }
+  int weight_to_root(int x) {
+    root(x);
+    return weight[x];
+  }
+  bool same(int a, int b) {
+    return root(a) == root(b);
+  }
+  bool unite(int a, int b, int w) {
+    w += weight_to_root(a); w -= weight_to_root(b);
+    a = root(a); b = root(b);
+    if (a == b) return false;
+    if (sz[a] &lt; sz[b]) swap(a,b), w = -w;
+    par[b] = a;
+    weight[b] = w;
+    sz[a] += sz[b];
+    return true;
+  }
+  int size(int x) {
+    return sz[root(x)];
+  }
+  int diff(int a, int b) {
+    return weight_to_root(b) - weight_to_root(a);
+  }
+};
+      </code></pre>
+      <p>
+        ・kruskal(最小全域木を求める) <span class = "yakumo">//O(MlogM) ≒ O(MlogN)<br />*UnionFind前提*</span><br />
+        問題文で連結が保証されている場合も多い
+      </p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  UnionFind uf(N);
+  vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M);
+  for (int i = 0; i < M; i++) {
+    int a,b; ll w; cin >> a >> b >> w;
+    a--; b--;
+    edges[i] = {a,b,w};
+  }
+  sort(edges.begin(),edges.end(),
+    [](auto &a,auto &b){return get&lt;2&gt;(a) < get&lt;2&gt;(b)});
+  int used = 0;
+  ll ans = 0;
+  for (const auto &[a,b,w] : edges) {
+    if (used == N-1) break;
+    if (uf.same(a,b)) continue;
+    uf.unite(a,b); ans += w; used++;
+  }
+  //used != N-1なら非連結
+}
+      </code></pre>
+      <p>
+        グラフ関連で使えそうなアルゴリズムを全てまとめました。<br />
+        問題によってうまく調節すればE問題くらいまで解けるはず
+      </p>
+    </div>
+    <div>
+      <p>・DFS(全頂点を巡るだけ) <span class = "yakumo">//O(N+M)</span></p>
+      <pre><code class="language-cpp">
+Graph G;
+vector&lt;int&gt; visited;
+
+void dfs(int v) {
+  visited[v] = 1;
+  for (int nv : G[v]) {
+      if (!visited[nv]) dfs(nv);
+  }
+}
+
+int main() {
+  int N,M; cin >> N >> M;
+  G.resize(N); visited.assign(N,0);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b; cin >> a >> b;
+    a--; b--;
+    G[a].push_back(b);
+    G[b].push_back(a); //有向グラフならいらない
+  }
+  dfs(0); //0スタート設定、入力によって変更
+}
+      </code></pre>
+      <p>・BFS(各頂点への最短距離) <span class = "yakumo">//O(N+M)</span></p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  Graph G(N); vector&lt;int&gt; dist(N,-1);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b; cin >> a >> b;
+    a--; b--;
+    G[a].push_back(b);
+    G[b].push_back(a); //有向グラフならいらない
+  }
+  queue&lt;int&gt; que;
+  que.push(0); dist[0] = 0; //0スタート設定、入力によって変更
+  while (!que.empty()) {
+    int v = que.front(); que.pop();
+    for (int nv : G[v]) {
+      if (dist[nv] != -1) continue;
+      dist[nv] = dist[v]+1;
+      que.push(nv);
+    }
+  }
+}
+      </code></pre>
+      <p>・dijkstra(重み付き最短距離) <span class = "yakumo">//O(MlogN)</span></p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  WGraph G(N); vector&lt;ll&gt; dist(N,INF);
+  for (int i = 0; i &lt; M; i++) {
+    int a,b; ll c; cin >> a >> b >> c;
+    a--; b--;
+    G[a].push_back({b,c});
+    G[b].push_back({a,c}); //有向グラフならいらない
+  }
+  priority_queue&lt;pair&lt;ll,int&gt;,vector&lt;pair&lt;ll,int&gt;&gt;,greater&lt;pair&lt;ll,int&gt;&gt;&gt; pq;
+  pq.push({0,0}); dist[0]  = 0; //0スタート設定、入力によって変更
+  while (!pq.empty()) {
+    auto [d,v] = pq.top(); pq.pop();
+    if (d > dist[v]) continue;
+    for (auto [nv,cost] : G[v]) {
+      if (dist[nv] > dist[v] + cost) {
+        dist[nv] = dist[v] + cost;
+        pq.push({dist[nv],nv});
+      }
+    }
+  }
+}
+      </code></pre>
+      <p>・bellman-ford(負の辺ありの重み付き最短距離) <span class = "yakumo">//O(NM)</span></p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M); vector<ll> dist(N,INF);
+  for (int i = 0; i < M; i++) {
+    int a,b; ll c; cin >> a >> b >> c;
+    a--; b--;
+    edges[i] = {a,b,c};
+  }
+  dist[0] = 0; //0スタート設定、入力によって変更
+  for (int i = 0; i < N-1; i++) {
+    bool updated = false;
+    for (const auto &[from,to,cost] : edges) {
+      if (dist[from] == INF) continue;
+      if (dist[to] > dist[from] + cost) {
+        dist[to] = dist[from] + cost;
+        updated = true;
+      }
+    }
+    if (!updated) break;
+  }
+  bool ok = true;
+  for (const auto &[from,to,cost] : edges) {
+    if (dist[from] == INF) continue;
+    if (dist[to] > dist[from] + cost) {
+      ok = false; //falseになる→N回目の更新→負閉路あり
+    }
+  }
+}
+      </code></pre>
+      <p>・warshall-floyd(全頂点対最短経路) <span class = "yakumo">//O(N^3)</span></p>
+      <pre><code class="language-cpp">
+int main() {
+  int N,M; cin >> N >> M;
+  vector&lt;vector&lt;ll&gt;&gt; dist(N,vector&lt;ll&gt;(N,INF));
+  for (int i = 0; i < N; i++) dist[i][i] = 0;
+  for (int i = 0; i < M; i++) {
+    int a,b; ll c; cin >> a >> b >> c;
+    a--; b--;
+    //多重辺対策てminを取る
+    dist[a][b] = min(dist[a][b],c);
+    dist[b][a] = min(dist[b][a],c); //有向グラフならいらない
+  }
+  for (int k = 0; k < N; k++) {
+    for (int i = 0; i < N; i++) {
+      for (int j = 0; j < N; j++) {
+        if (dist[i][k] == INF || dist[k][j] == INF) continue;
+        dist[i][j] = min(dist[i][j],dist[i][k]+dist[k][j]);
+      }
+    }
+  }
+  bool ok = true;
+  for (int i = 0; i < N; i++) if (dist[i][i] < 0) ok = false;
+  //falseなら負閉路あり
+}
+      </code></pre>
+    </div>
+  </div>
+  <div id="footer"></div>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>
