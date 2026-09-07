@@ -37,9 +37,9 @@ for (int d = 0; d &lt; 4; d++) {
       <p>・Union-Findテンプレ <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
 struct UnionFind {
-  vector&lt;int&gt; par, sz;
+  vi par, sz;
   UnionFind(int n) : par(n), sz(n,1) {
-    for (int i = 0; i &lt; n; i++) par[i] = i;
+    rep(i,n) par[i] = i;
   }
   int root(int x) {
     return par[x] == x ? x : par[x] = root(par[x]);
@@ -62,9 +62,9 @@ struct UnionFind {
       <p>・重み付きUnion-Find <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
 struct WUnionFind {
-  vector&lt;int&gt; par, sz, weight;
+  vi par, sz, weight;
   WUnionFind(int n) : par(n), sz(n,1), weight(n,0) {
-    for (int i = 0; i &lt; n; i++) par[i] = i;
+    rep(i,n) par[i] = i;
   }
   int root(int x) {
     if (par[x] == x) return x;
@@ -106,12 +106,12 @@ int main() {
   int N,M; cin >> N >> M;
   UnionFind uf(N);
   vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M);
-  for (int i = 0; i &lt; M; i++) {
+  rep(i,M) {
     int a,b; ll w; cin >> a >> b >> w;
     a--; b--;
     edges[i] = {a,b,w};
   }
-  sort(edges.begin(),edges.end(),
+  sort(all(edge),
     [](auto &a,auto &b){return get&lt;2&gt;(a) &lt; get&lt;2&gt;(b)});
   int used = 0;
   ll ans = 0;
@@ -158,11 +158,11 @@ struct SCC {
       <p>・DFS(全頂点を巡るだけ) <span class = "yakumo">//O(N+M)</span></p>
       <pre><code class="language-cpp">
 Graph G;
-vector&lt;int&gt; visited;
+vi visited;
 
 void dfs(int v) {
   visited[v] = 1;
-  for (int nv : G[v]) {
+  for (auto nv : G[v]) {
       if (!visited[nv]) dfs(nv);
   }
 }
@@ -170,7 +170,7 @@ void dfs(int v) {
 int main() {
   int N,M; cin >> N >> M;
   G.resize(N); visited.assign(N,0);
-  for (int i = 0; i &lt; M; i++) {
+  rep(i,M) {
     int a,b; cin >> a >> b;
     a--; b--;
     G[a].push_back(b);
@@ -183,8 +183,8 @@ int main() {
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
-  Graph G(N); vector&lt;int&gt; dist(N,-1);
-  for (int i = 0; i &lt; M; i++) {
+  Graph G(N); vi dist(N,-1);
+  rep(i,M) {
     int a,b; cin >> a >> b;
     a--; b--;
     G[a].push_back(b);
@@ -194,7 +194,7 @@ int main() {
   que.push(0); dist[0] = 0; //0スタート設定、入力によって変更
   while (!que.empty()) {
     int v = que.front(); que.pop();
-    for (int nv : G[v]) {
+    for (auto nv : G[v]) {
       if (dist[nv] != -1) continue;
       dist[nv] = dist[v]+1;
       que.push(nv);
@@ -206,14 +206,14 @@ int main() {
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
-  WGraph G(N); vector&lt;ll&gt; dist(N,INF);
-  for (int i = 0; i &lt; M; i++) {
+  WGraph G(N); vl; dist(N,INF);
+  rep(i,M) {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     G[a].push_back({b,c});
     G[b].push_back({a,c}); //有向グラフならいらない
   }
-  priority_queue&lt;pair&lt;ll,int&gt;,vector&lt;pair&lt;ll,int&gt;&gt;,greater&lt;pair&lt;ll,int&gt;&gt;&gt; pq;
+  pqg(pll) pq;
   pq.push({0,0}); dist[0]  = 0; //0スタート設定、入力によって変更
   while (!pq.empty()) {
     auto [d,v] = pq.top(); pq.pop();
@@ -232,13 +232,13 @@ int main() {
 int main() {
   int N,M; cin >> N >> M;
   vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M); vector<ll> dist(N,INF);
-  for (int i = 0; i &lt; M; i++) {
+  rep(i,M) {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     edges[i] = {a,b,c};
   }
   dist[0] = 0; //0スタート設定、入力によって変更
-  for (int i = 0; i &lt; N-1; i++) {
+  rep(i,N-1) {
     bool updated = false;
     for (const auto &[from,to,cost] : edges) {
       if (dist[from] == INF) continue;
@@ -262,25 +262,25 @@ int main() {
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
-  vector&lt;vector&lt;ll&gt;&gt; dist(N,vector&lt;ll&gt;(N,INF));
-  for (int i = 0; i &lt; N; i++) dist[i][i] = 0;
-  for (int i = 0; i &lt; M; i++) {
+  vvl dist(N,vector&lt;ll&gt;(N,INF));
+  rep(i,N) dist[i][i] = 0;
+  rep(i,M) {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     //多重辺対策てminを取る
     dist[a][b] = min(dist[a][b],c);
     dist[b][a] = min(dist[b][a],c); //有向グラフならいらない
   }
-  for (int k = 0; k &lt; N; k++) {
-    for (int i = 0; i &lt; N; i++) {
-      for (int j = 0; j &lt; N; j++) {
+  rep(k,N) {
+    rep(i,N) {
+      rep(j,N) {
         if (dist[i][k] == INF || dist[k][j] == INF) continue;
         dist[i][j] = min(dist[i][j],dist[i][k]+dist[k][j]);
       }
     }
   }
   bool ok = true;
-  for (int i = 0; i &lt; N; i++) if (dist[i][i] < 0) ok = false;
+  rep(i,N) if (dist[i][i] < 0) ok = false;
   //falseなら負閉路あり
 }
       </code></pre>
