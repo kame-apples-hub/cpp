@@ -38,31 +38,7 @@ struct SegTree {
   }
 };
     </code></pre>
-    <p>・BIT <span class = "yakumo">//O(logN)</span></p>
-    <pre><code class="language-cpp">
-struct BIT {
-  int n;
-  vi bit;
-  BIT(int sz) : n(sz), bit(sz+1,0) {}
-  void add(int x, int y) {
-    x++;
-    for (int i = x; i <= n; i += i&-i) bit[i] += y;
-  }
-  //[0,x)の和
-  int sum(int x) {
-    int res = 0;
-    for (int i = x; i > 0; i -= i&-i) res += bit[i];
-    return res;
-  }
-  //[l,r)の和
-  int prod(int l, int r) {
-    return sum(r) - sum(l);
-  }
-}; 
-      </code></pre>
-    </div>
-    <div>
-      <p>・遅延評価セグメント木(RMQ) <span class = "yakumo">//O(logN)で区間への加算</span></p>
+    <p>・遅延評価セグメント木(区間加算、区間最小値取得) <span class = "yakumo">//O(logN)で区間への加算</span></p>
       <pre><code class="language-cpp">
 struct Lazy_SegTree {
   int n; vi seg,lazy;
@@ -102,6 +78,73 @@ struct Lazy_SegTree {
       prod(k&lt;&lt;1|1,(l+r)/2,r,a,b));
   }
   int prod(int l, int r) {
+    return prod(1,0,n,l,r);
+  }
+};
+    </code></pre>
+    </div>
+    <div>
+      <p>・BIT <span class = "yakumo">//O(logN)</span></p>
+    <pre><code class="language-cpp">
+struct BIT {
+  int n;
+  vi bit;
+  BIT(int sz) : n(sz), bit(sz+1,0) {}
+  void add(int x, int y) {
+    x++;
+    for (int i = x; i <= n; i += i&-i) bit[i] += y;
+  }
+  //[0,x)の和
+  int sum(int x) {
+    int res = 0;
+    for (int i = x; i > 0; i -= i&-i) res += bit[i];
+    return res;
+  }
+  //[l,r)の和
+  int prod(int l, int r) {
+    return sum(r) - sum(l);
+  }
+}; 
+      </code></pre>
+      <p>・遅延評価セグメント木(区間代入、区間最大値取得) <span class = "yakumo">//O(logN)で区間へ代入</span></p>
+      <pre><code class="language-cpp">
+struct Lazy_SegTree {
+  int n; vi seg,lazy;
+  Lazy_SegTree(int sz) {
+    n = 1;
+    while (n &lt; sz) n &lt;&lt;= 1;
+    seg.resize(2*n,0);
+    lazy.resize(2*n,-1);
+  }
+  void apply(int i, int x) {
+    seg[i] = x; lazy[i] = x;
+  }
+  void push(int i) {
+    if (lazy[i] == -1) return;
+    if (i &lt; n) {
+      apply(i&lt;&lt;1,lazy[i]);
+      apply(i&lt;&lt;1|1,lazy[i]);
+    }
+    lazy[i] = -1;
+  }
+  void upd(int k, int l, int r, int x, int a, int b) {
+    if (a >= r || b <= l) return;
+    if (a <= l && r <= b) {apply(k,x); return;}
+    push(k);
+    upd(k&lt;&lt;1,l,(l+r)/2,x,a,b);
+    upd(k&lt;&lt;1|1,(l+r)/2,r,x,a,b);
+    seg[k] = max(seg[k<<1],seg[k<<1|1]);
+  }
+  void upd(int l, int r, int x) {
+    upd(1,0,n,x,l,r);
+  }
+  int prod(int k, int l, int r, int a, int b) {
+    if (a >= r || b <= l) return 0;
+    if (a <= l && r <= b) return seg[k];
+    push(k);
+    return max(prod(k<<1,l,(l+r)/2,a,b),prod(k<<1|1,(l+r)/2,r,a,b));
+  }
+  int prod(int l,int r) {
     return prod(1,0,n,l,r);
   }
 };
