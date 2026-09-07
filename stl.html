@@ -33,7 +33,7 @@
         <span class = "komeiji">string</span><br />
         　・string S<br />
         　・S.substr(l,n)←Sのl文字目からn文字の部分文字列<br />
-        　・stoi(S),stoll(S)←文字列を数字に変換<br />
+        　・stoi(S),stoll(S)←文字列を数字に変換（<span class = "yakumo">とっても遅い</span>）<br />
         　・to_string(n)←数字を文字列に変換
       </p>
       <p>
@@ -54,7 +54,7 @@
       <p>
         <span class = "komeiji">priority_queue</span><br />
         　使用例：ダイクストラ法、貪欲<br />
-        　・priority_queue<int> pq←大きい順<br />
+        　・priority_queue&lt;int&gt; pq←大きい順<br />
         　・priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq←小さい順<br />
         　・pq.push(x), pq.pop() <span class = "yakumo">//O(logN)</span><br />
         　・pq.top()←一番前の要素を参照 <span class = "yakumo">//O(1)</span><br />
@@ -63,13 +63,13 @@
       <p>
         <span class = "komeiji">deque</span> <span class = "yakumo">//全てO(1)</span><br />
         　使用例：0-1BFS<br />
-        　・deque<int> dq<br />
+        　・deque&lt;int&gt; dq<br />
         　・dq.front(), dq.back()<br />
         　・dq.push_front(x)<br />
         　・dq.push_back(x)<br />
         　・dq.pop_front()<br />
         　・dq.pop_back()<br />
-        　・添字でアクセスもできる(dp[i]のような感じ)
+        　・添字でアクセスもできる(dq[i]のような感じ)
       </p>
       <p>
         <span class = "komeiji">map</span> <span class = "yakumo">//全てO(logN)</span><br />
@@ -98,7 +98,7 @@
       <p>
         <span class = "komeiji">pair</span><br />
         　・pair&lt;int,int&gt; p = {a,b}<br />
-        　・p.first,p.second←それぞれにアクセス
+        　・p.first, p.second←それぞれにアクセス
       </p>
       <p>
         <span class = "komeiji">tuple</span><br />
@@ -115,7 +115,6 @@
         <span class = "komeiji">lower_bound(以上),upper_bound(より大きい)</span> <span class = "yakumo">//O(logN)</span><br />
         　＊昇順sortされている必要あり＊<br />
         　使用例：二分探索<br />
-        　・int target = n←int型の場合の例、あらかじめ変数に入れておくと分かりやすい<br />
         　・auto it = lower_bound(v.begin(),v.end(),n)←イテレーター取得<br />
         　・if (it != v.end()) int index = it - v.begin()←インデックス取得
       </p>
