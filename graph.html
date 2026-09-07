@@ -106,13 +106,13 @@ int main() {
   int N,M; cin >> N >> M;
   UnionFind uf(N);
   vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M);
-  for (int i = 0; i < M; i++) {
+  for (int i = 0; i &lt; M; i++) {
     int a,b; ll w; cin >> a >> b >> w;
     a--; b--;
     edges[i] = {a,b,w};
   }
   sort(edges.begin(),edges.end(),
-    [](auto &a,auto &b){return get&lt;2&gt;(a) < get&lt;2&gt;(b)});
+    [](auto &a,auto &b){return get&lt;2&gt;(a) &lt; get&lt;2&gt;(b)});
   int used = 0;
   ll ans = 0;
   for (const auto &[a,b,w] : edges) {
@@ -123,10 +123,6 @@ int main() {
   //used != N-1なら非連結
 }
       </code></pre>
-      <p>
-        グラフ関連で使えそうなアルゴリズムを全てまとめました。<br />
-        問題によってうまく調節すればE問題くらいまで解けるはず
-      </p>
     </div>
     <div>
       <p>・DFS(全頂点を巡るだけ) <span class = "yakumo">//O(N+M)</span></p>
@@ -206,13 +202,13 @@ int main() {
 int main() {
   int N,M; cin >> N >> M;
   vector&lt;tuple&lt;int,int,ll&gt;&gt; edges(M); vector<ll> dist(N,INF);
-  for (int i = 0; i < M; i++) {
+  for (int i = 0; i &lt; M; i++) {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     edges[i] = {a,b,c};
   }
   dist[0] = 0; //0スタート設定、入力によって変更
-  for (int i = 0; i < N-1; i++) {
+  for (int i = 0; i &lt; N-1; i++) {
     bool updated = false;
     for (const auto &[from,to,cost] : edges) {
       if (dist[from] == INF) continue;
@@ -237,24 +233,24 @@ int main() {
 int main() {
   int N,M; cin >> N >> M;
   vector&lt;vector&lt;ll&gt;&gt; dist(N,vector&lt;ll&gt;(N,INF));
-  for (int i = 0; i < N; i++) dist[i][i] = 0;
-  for (int i = 0; i < M; i++) {
+  for (int i = 0; i &lt; N; i++) dist[i][i] = 0;
+  for (int i = 0; i &lt; M; i++) {
     int a,b; ll c; cin >> a >> b >> c;
     a--; b--;
     //多重辺対策てminを取る
     dist[a][b] = min(dist[a][b],c);
     dist[b][a] = min(dist[b][a],c); //有向グラフならいらない
   }
-  for (int k = 0; k < N; k++) {
-    for (int i = 0; i < N; i++) {
-      for (int j = 0; j < N; j++) {
+  for (int k = 0; k &lt; N; k++) {
+    for (int i = 0; i &lt; N; i++) {
+      for (int j = 0; j &lt; N; j++) {
         if (dist[i][k] == INF || dist[k][j] == INF) continue;
         dist[i][j] = min(dist[i][j],dist[i][k]+dist[k][j]);
       }
     }
   }
   bool ok = true;
-  for (int i = 0; i < N; i++) if (dist[i][i] < 0) ok = false;
+  for (int i = 0; i &lt; N; i++) if (dist[i][i] < 0) ok = false;
   //falseなら負閉路あり
 }
       </code></pre>
