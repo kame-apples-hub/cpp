@@ -262,7 +262,7 @@ int main() {
       <pre><code class="language-cpp">
 int main() {
   int N,M; cin >> N >> M;
-  vvl dist(N,vector&lt;ll&gt;(N,INF));
+  vvl dist(N,vl(N,INF));
   rep(i,N) dist[i][i] = 0;
   rep(i,M) {
     int a,b; ll c; cin >> a >> b >> c;
