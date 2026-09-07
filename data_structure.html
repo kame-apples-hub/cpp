@@ -92,7 +92,7 @@ struct Lazy_SegTree {
     seg[k] = min(seg[k&lt;&lt;1],seg[k&lt;&lt;1|1]);
   }
   void add(int l, int r, int x) {
-    return add(1,0,n,x,l,r);
+    add(1,0,n,x,l,r);
   }
   int prod(int k, int l, int r, int a, int b) {
     if (a >= r || b <= l) return inf;
