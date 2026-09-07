@@ -10,7 +10,7 @@
   <body>
     <div id="header"></div>
     <div>
-      <h2 class = "scarlet">数学問題計算テンプレ</h2>
+      <h2 class = "scarlet">数学問題ライブラリ</h2>
       <p class = "yakumo">ホームのやつを最初に置いていること前提です</p>
     </div>
     <div class = "library">
@@ -38,10 +38,10 @@ map&lt;ll,ll&gt; prime_factorization(ll N) {
       </code></pre>
       <p>・エラトステネスの篩(N以下の素数を数える) <span class = "yakumo">//O(NloglogN)</span></p>
       <pre><code class="language-cpp">
-vector&lt;bool&gt; isprime;
-vector&lt;int&gt; prime;
+vb isprime;
+vi prime;
 void eratosthenes(ll N) {
-  isprime.assign(N+1,true); prime.clear();
+  isprime.resize(N+1,true); prime.clear();
   isprime[0] = isprime[1] = false;
   for (ll i = 2; i*i <= N; i++) {
     if (isprime[i]) {
@@ -60,8 +60,8 @@ void eratosthenes(ll N) {
 ll modpow(ll x,ll e) {
   ll r = 1;
   while (e) {
-    if (e & 1) r = r*x%MOD;
-    x = x*x%MOD;
+    if (e & 1) r = mymod(r*x);
+    x = mymod(x*x);
     e /= 2;
   }
   return r;
@@ -73,23 +73,23 @@ ll inv(ll x) {
       </code></pre>
       <p>・場合の数でよく使うやつまとめ(initで初期化) <span class = "yakumo">//O(N)</p>
       <pre><code class="language-cpp">
-vector&lt;ll&gt; fact,invfact;
+vl fact,invfact;
 void init(ll N) {
   fact.resize(N+1); invfact.resize(N+1);
   fact[0] = 1;
-  for (int i = 1; i <= N; i++) fact[i] = fact[i-1]*i%MOD;
+  for (int i = 1; i <= N; i++) fact[i] = mymod(fact[i-1]*i);
   invfact[N] = inv(fact[N]);
-  for (int i = N ; i > 0; i--) invfact[i-1] = invfact[i]*i%MOD;
+  for (int i = N ; i > 0; i--) invfact[i-1] = mymod(invfact[i]*i);
 }
 
 ll nPr(ll n,ll r) {
   if (r > n || r < 0) return 0;
-  return fact[n]*invfact[n-r]%MOD;
+  return mymod(fact[n]*invfact[n-r]);
 }
 
 ll nCr(ll n,ll r) {
   if (r > n || r < 0) return 0;
-  return fact[n]*invfact[r]%MOD*invfact[n-r]%MOD;
+  return mymod(mymod(fact[n]*invfact[r])*invfact[n-r]);
 }
 
 ll nHr(ll n,ll r) {
