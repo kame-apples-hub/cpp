@@ -61,7 +61,7 @@ struct UnionFind {
       </code></pre>
       <p>・重み付きUnion-Find <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
-        struct WUnionFind {
+struct WUnionFind {
   vi par,sz,weight;
   WUnionFind(int n) : par(n),sz(n,1),weight(n,0) {
     rep(i,n) par[i] = i;
