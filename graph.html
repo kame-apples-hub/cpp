@@ -61,39 +61,35 @@ struct UnionFind {
       </code></pre>
       <p>・重み付きUnion-Find <span class = "yakumo">//O(α(N)) ≒ O(1)</span></p>
       <pre><code class="language-cpp">
-struct WUnionFind {
-  vi par, sz, weight;
-  WUnionFind(int n) : par(n), sz(n,1), weight(n,0) {
+        struct WUnionFind {
+  vi par,sz,weight;
+  WUnionFind(int n) : par(n),sz(n,1),weight(n,0) {
     rep(i,n) par[i] = i;
   }
   int root(int x) {
     if (par[x] == x) return x;
-    int r = root(par[x]);
+    int satori = root(par[x]);
     weight[x] += weight[par[x]];
-    return par[x] = r;
-  }
-  int weight_to_root(int x) {
-    root(x);
-    return weight[x];
+    return par[x] = satori;
   }
   bool same(int a, int b) {
     return root(a) == root(b);
   }
-  bool unite(int a, int b, int w) {
-    w += weight_to_root(a); w -= weight_to_root(b);
+  int diff(int a, int b) {
+    root(a); root(b);
+    return weight[b]-weight[a];
+  }
+  void unite(int a, int b, int w) {
+    w += weight[a], w -= weight[b];
     a = root(a); b = root(b);
-    if (a == b) return false;
-    if (sz[a] &lt; sz[b]) swap(a,b), w = -w;
+    if (a == b) return;
+    if (sz[a] &lt; sz[b]) {swap(a,b); w = -w;}
     par[b] = a;
-    weight[b] = w;
     sz[a] += sz[b];
-    return true;
+    weight[b] = w;
   }
   int size(int x) {
     return sz[root(x)];
-  }
-  int diff(int a, int b) {
-    return weight_to_root(b) - weight_to_root(a);
   }
 };
       </code></pre>
