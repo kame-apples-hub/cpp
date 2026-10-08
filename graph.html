@@ -80,8 +80,9 @@ struct WUnionFind {
     return weight[b]-weight[a];
   }
   void unite(int a, int b, int w) {
+    int satori = root(a), koishi = root(b);
     w += weight[a], w -= weight[b];
-    a = root(a); b = root(b);
+    a = satori; b = koishi;
     if (a == b) return;
     if (sz[a] &lt; sz[b]) {swap(a,b); w = -w;}
     par[b] = a;
