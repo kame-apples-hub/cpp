@@ -149,12 +149,12 @@ struct BIT {
   }
 }; 
       </code></pre>
-      <p>・SparceTable <span class = "yakumo">//事前処理O(NlogN), クエリO(1)</span></p>
+      <p>・SparseTable <span class = "yakumo">//事前処理O(NlogN), クエリO(1)</span></p>
       <pre><code class="language-cpp">
-        struct Sparce_Table {
+        struct Sparse_Table {
   int N,K;
   vvl table;
-  Sparce_Table(const vl &A) {
+  Sparse_Table(const vl &A) {
     N = A.size();
     K = 0;
     while (1&lt;&lt;(K+1) &lt;= N) K++;
